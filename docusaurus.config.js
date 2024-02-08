@@ -23,20 +23,23 @@ const addAliasPlugin = () => ({
 const injectPlausiblePlugin = () => ({
   name: 'inject-plausible-plugin',
   injectHtmlTags: () => ({
-    headTags: [{
-      tagName: 'script',
-      attributes: {
-        src: 'https://plausible.io/js/plausible.js',
-        defer: true,
-        'data-domain': 'docs.logto.io',
+    headTags: [
+      {
+        tagName: 'script',
+        attributes: {
+          src: 'https://plausible.io/js/plausible.js',
+          defer: true,
+          'data-domain': 'docs.logto.io',
+        },
       },
-    }, {
-      tagName: 'meta',
-      attributes: {
-        name: 'google-site-verification',
-        content: '3EYzsnarDwG6zL2dlHvyC8ySVcV6Q3RGlvh7-bvhb2k',
+      {
+        tagName: 'meta',
+        attributes: {
+          name: 'google-site-verification',
+          content: '3EYzsnarDwG6zL2dlHvyC8ySVcV6Q3RGlvh7-bvhb2k',
+        },
       },
-    }],
+    ],
   }),
 });
 
@@ -53,12 +56,14 @@ const config = {
 
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'zh-cn'],
+    locales: ['en'],
   },
 
   markdown: {
     mermaid: true,
   },
+
+  trailingSlash: true,
 
   presets: [
     [
@@ -101,7 +106,7 @@ const config = {
             label: 'Docs',
           },
           {
-            to: 'blog',
+            href: 'https://blog.logto.io/',
             position: 'left',
             label: 'Blog',
           },
@@ -117,8 +122,9 @@ const config = {
             label: 'API',
           },
           {
-            type: 'localeDropdown',
+            type: 'docsVersionDropdown',
             position: 'right',
+            dropdownActiveClassDisabled: true,
           },
           {
             href: 'https://github.com/logto-io/logto',
@@ -173,7 +179,52 @@ const config = {
         indexName: 'logto',
       },
     }),
-  plugins: [addAliasPlugin, injectPlausiblePlugin, 'docusaurus-plugin-sass'],
+  plugins: [
+    addAliasPlugin,
+    injectPlausiblePlugin,
+    'docusaurus-plugin-sass',
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        /**
+         * Required for any multi-instance plugin
+         */
+        id: 'tutorial',
+        /**
+         * URL route for the blog section of your site.
+         * *DO NOT* include a trailing slash.
+         */
+        routeBasePath: 'tutorial',
+        /**
+         * Path to data on filesystem relative to site dir.
+         */
+        path: './tutorial',
+        blogSidebarCount: 0,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        id: 'terms',
+        routeBasePath: 'terms',
+        path: './terms',
+        blogSidebarCount: 0,
+        showReadingTime: false,
+        feedOptions: {},
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        id: 'about',
+        routeBasePath: 'about',
+        path: './about',
+        blogSidebarCount: 0,
+        showReadingTime: false,
+        feedOptions: {},
+      },
+    ],
+  ],
   themes: ['docusaurus-theme-redoc', '@docusaurus/theme-mermaid'],
 };
 
